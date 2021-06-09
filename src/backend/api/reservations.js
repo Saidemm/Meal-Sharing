@@ -3,12 +3,14 @@ const router = express.Router();
 const knex = require("../database");
 
 
-router.get('/', async (request, response) =>{
+router.get('/', async (request, response) => {
     try {
         const reservations = await knex('reservation')
         response.send(reservations);
     } catch (error) {
-        response.status(500).send({ error: "Internal Server Error." });
+        response.status(500).send({
+            error: "Internal Server Error."
+        });
     }
 });
 
@@ -20,67 +22,87 @@ router.post('/', async (request, response) => {
             .insert(newReservation);
         response.status(201).json("Reservation has been added");
     } catch (error) {
-        response.status(500).send({ error: "Internal Server Error." });
+        response.status(500).send({
+            error: "Internal Server Error."
+        });
     }
 });
 
-router.get('/:id', async(request, response) => {
-    try{
+router.get('/:id', async (request, response) => {
+    try {
         const id = parseInt(request.params.id);
 
         if (isNaN(id)) {
-            response.status(400).json({ error: "limit must be integers." });
+            response.status(400).json({
+                error: "limit must be integers."
+            });
             return;
-          }
+        }
         const reservationsWithId = await knex("reservation")
-        .where({id : id});
+            .where({
+                id: id
+            });
         response.json(reservationsWithId);
-    } catch(error) {
-        response.status(500).send({ error: "Internal Server Error." });   
+    } catch (error) {
+        response.status(500).send({
+            error: "Internal Server Error."
+        });
     }
 });
 
 //Updates the reservation by id
-router.put('/:id', async(request, response) => {
-    try{
-        
+router.put('/:id', async (request, response) => {
+    try {
+
         const id = parseInt(request.params.id);
 
         console.log(id, request.body);
 
         if (isNaN(id)) {
-            response.status(400).json({ error: "limit must be integers." });
+            response.status(400).json({
+                error: "limit must be integers."
+            });
             return;
-          }
+        }
         const upadatedreservation = await knex("reservation")
-        .where({id : id})
-        .update(request.body);
+            .where({
+                id: id
+            })
+            .update(request.body);
         response.json(upadatedreservation);
-    } catch(error) {
-        response.status(500).send({ error: "Internal Server Error." });   
+    } catch (error) {
+        response.status(500).send({
+            error: "Internal Server Error."
+        });
     }
 });
 
 
-router.delete('/:id', async(request, response) => {
-    try{
+router.delete('/:id', async (request, response) => {
+    try {
         const id = parseInt(request.params.id);
 
         if (isNaN(id)) {
-            response.status(400).json({ error: "limit must be integers." });
+            response.status(400).json({
+                error: "limit must be integers."
+            });
             return;
-          }
+        }
         await knex("reservation")
-        .where({id : id})
-        .del();
-        
+            .where({
+                id: id
+            })
+            .del();
+
         response.status(201).send("Reservation successfully deleted");
 
-    } catch(error) {
-        response.status(500).send({ error: "Internal Server Error." });   
+    } catch (error) {
+        response.status(500).send({
+            error: "Internal Server Error."
+        });
     }
 });
-  
+
 
 
 module.exports = router;
