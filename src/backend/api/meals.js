@@ -2,131 +2,141 @@ const express = require("express");
 const router = express.Router();
 const knex = require("../database");
 
+function showMealsWithAvailableReservations(request) {
+  if ("availableReservations" in request.query) {
+    let availableReservations = request.query.availableReservations;
+    if (availableReservations == 'true') {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getMaxPrice(request) {
+  if ("maxPrice" in request.query) {
+    const maxPrice = parseFloat(request.query.maxPrice);
+    if (isNaN(maxPrice)) {
+      throw {
+        type: "Invalid Input Param",
+        message: "Invalid input: maxPrice must be a number."
+      }
+    }
+    return maxPrice;
+  } else {
+    return null;
+  }
+}
+
+function getPartialTitle(request) {
+  if ("title" in request.query) {
+    const title = request.query.title.toLowerCase();
+    return title;
+  } else {
+    return null;
+  }
+}
+
+function getCreatedAfterDate(request) {
+  if ("createdAfter" in request.query) {
+    if (request.query.createdAfter == '') {
+      return null;
+    }
+    const createdAfter = new Date(request.query.createdAfter);
+    if (createdAfter == null) {
+      throw {
+        type: "Invalid Input Param",
+        message: "Invalid input: createdAfter is not a date value"
+      }
+    }
+    return createdAfter;
+  } else {
+    return null;
+  }
+}
+
+function getLimit(request) {
+  if ("limit" in request.query) {
+    const limit = parseInt(request.query.limit);
+    if (isNaN(limit)) {
+      throw {
+        type: "Invalid Input Param",
+        message: "Invalid input: limit must be an integer."
+      }
+    }
+    return limit;
+  } else {
+    return null;
+  }
+}
+
 router.get("/", async (request, response) => {
   try {
-    // knex syntax for selecting things. Look up the documentation for knex for further info
+    let dbQuery = "select * from meal";
+    let dbQueryParams = [];
+    let whereAddedToQuery = false;
 
-    const titles = await knex("meal").select("title");
-    console.log(titles)
-    response.send(titles);
+    // Handling showing meals with available reservations
+    if (showMealsWithAvailableReservations(request)) {
+      dbQuery = `select meal.*
+        from (SELECT meal.*, (meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0)) AS available_reservations
+        FROM meal
+        LEFT JOIN reservation
+        ON meal.id = reservation.meal_id
+        GROUP BY meal.id
+        HAVING available_reservations > 0) meal`;
+    }
 
+    // Handling maxPrice query param
+    const maxPrice = getMaxPrice(request);
+    if (maxPrice != null) {
+      dbQuery += (whereAddedToQuery ? " and" : " where") + " price < ?";
+      dbQueryParams[dbQueryParams.length] = maxPrice;
+      whereAddedToQuery = true;
+    }
+
+    // Handling title query param
+    const partialTitle = getPartialTitle(request);
+    if (partialTitle != null) {
+      dbQuery += (whereAddedToQuery ? " and" : " where") + " LOWER(title) like ?";
+      dbQueryParams[dbQueryParams.length] = '%' + partialTitle + '%';
+      whereAddedToQuery = true;
+    }
+
+    // Handling createdAfter query param
+    const createdAfterDate = getCreatedAfterDate(request);
+    if (createdAfterDate != null) {
+      dbQuery += (whereAddedToQuery ? " and" : " where") + " created_date > ?";
+      dbQueryParams[dbQueryParams.length] = createdAfterDate;
+      whereAddedToQuery = true;
+    }
+
+    // Handling limit query param
+    const limit = getLimit(request);
+    if (limit != null) {
+      dbQuery += " limit ?";
+      dbQueryParams[dbQueryParams.length] = limit;
+    }
+
+    console.log(dbQuery);
+    console.log(dbQueryParams);
+
+    let meals = await knex.raw(dbQuery, dbQueryParams);
+    response.send(meals[0]);
   } catch (error) {
     console.log(error.message);
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
-  }
-});
-
-router.get("/max-price", async (request, response) => {
-  try {
-    const maxPrice = parseFloat(request.query.maxPrice);
-    console.log(maxPrice);
-    if (isNaN(maxPrice)) {
-      response.status(400).json({
-        error: "maxPrice must be integers."
+    if (error.type == 'Invalid Input Param') {
+      response.status(400).send({
+        error: error.message
       });
-      return;
-    }
-    const mealsLessThanMaxPrice = await knex("meal").where('price', '<', maxPrice);
-    response.send(mealsLessThanMaxPrice);
-    return;
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
-  }
-});
-
-router.get("/availableReservations", async (request, response) => {
-  try {
-    let availableReservations = request.query.availableReservations;
-    if (availableReservations = 'true') {
-      const mealsHasAvailableReservations = await knex("meal")
-        .select("meal.id", "meal.title", "meal.max_reservations")
-        .sum({
-          total_reserved: 'reservation.number_of_guests'
-        })
-        .leftJoin("reservation", "meal.id", "reservation.meal_id")
-        .groupBy("meal.id")
-        .having("meal.max_reservations", ">", "total_reserved")
-      response.json(mealsHasAvailableReservations)
-      return;
-    }
-
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
-  }
-});
-
-router.get("/title", async (request, response) => {
-  try {
-    const title = request.query.title.toLowerCase();
-    console.log({
-      title
-    })
-    const mealWithTitle = await knex("meal")
-      .where("meal.title", "Like", `%${title}%`);
-    response.json(mealWithTitle);
-    return;
-
-  } catch (error) {
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
-  }
-});
-
-router.get("/createdAfter", async (request, response) => {
-  try {
-    const createdAfter = new Date(request.query.createdAfter);
-    if (!createdAfter.getDate()) {
-      response.status(400).json({
-        error: "Date is not valid!"
-      })
-    }
-
-    const mealsCreatedAfterDate = await knex("meal")
-      .where("created_date", ">=", createdAfter)
-    response.json(mealsCreatedAfterDate);
-    return;
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
-  }
-});
-
-
-router.get("/limit", async (request, response) => {
-  try {
-    const numbersOfMeals = Number(request.query.limit);
-    if (isNaN(numbersOfMeals)) {
-      response.status(400).json({
-        error: "limit must be integers."
+    } else {
+      response.status(500).send({
+        error: "Internal Server Error."
       });
-      return;
     }
-    const limitedNumOfMeals = await knex("meal").limit(numbersOfMeals);
-    response.json(limitedNumOfMeals)
-    return;
-
-  } catch (error) {
-    response.status(500).send({
-      error: "Internal Server Error."
-    });
   }
 });
-
-
 
 //Adds a new meal
-
 router.post('/', async (request, response) => {
   try {
     let newMeal = request.body;
