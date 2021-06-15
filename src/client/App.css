@@ -1,3 +1,19 @@
 * {
     box-sizing: border-box;
 }
+
+nav {
+    display : flex;
+    justify-content : space-around;
+    align-items : center;
+    min-height : 10vh;
+    background-color: rgb(248, 184, 160);
+}
+
+.nav-links {
+    width : 50%;
+    display : flex;
+    justify-content : space-around;
+    align-items : center;
+    list-style : none;
+}

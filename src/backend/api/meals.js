@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const knex = require("../database");
+var cors = require('cors');
+
+
 
 function showMealsWithAvailableReservations(request) {
   if ("availableReservations" in request.query) {
