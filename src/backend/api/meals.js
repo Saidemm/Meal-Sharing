@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const knex = require("../database");
-var cors = require('cors');
+
 
 
 
@@ -120,9 +120,6 @@ router.get("/", async (request, response) => {
       dbQueryParams[dbQueryParams.length] = limit;
     }
 
-    console.log(dbQuery);
-    console.log(dbQueryParams);
-
     let meals = await knex.raw(dbQuery, dbQueryParams);
     response.send(meals[0]);
   } catch (error) {
@@ -143,12 +140,35 @@ router.get("/", async (request, response) => {
 router.post('/', async (request, response) => {
   try {
     let newMeal = request.body;
+    if(newMeal.title == null || newMeal.title.trim() == ''){
+      response.status(400).send({
+        error: "Meal title is mandatory."
+      });
+      return;
+    }
+    else if(newMeal.location == null || newMeal.location.trim() == ''){
+      response.status(400).send({
+        error: "Meal location is mandatory."
+      });
+    }
+    else if(newMeal.max_reservations == null || newMeal.max_reservations.trim() == ''){
+      response.status(400).send({
+        error: "Meal max_reservations is mandatory."
+      });
+    }
+    else if(newMeal.when == null || newMeal.when.trim() == ''){
+      response.status(400).send({
+        error: "Meal 'when' field is mandatory."
+      });
+    }
+
     newMeal.when = new Date(newMeal.when);
-    newMeal.created_date = new Date(newMeal.created_date);
+    newMeal.created_date = new Date();
     const newInsertedMeal = await knex("meal")
-      .insert(request.body)
-    response.end("New meal:" + JSON.stringify(newInsertedMeal))
+      .insert(newMeal);
+    response.send("New meal:" + JSON.stringify(newInsertedMeal));
   } catch (error) {
+    console.log(error);
     response.status(500).send({
       error: "Internal Server Error."
     });
@@ -165,9 +185,23 @@ router.get("/:id", async (request, response) => {
       });
       return;
     }
-    const mealById = await knex("meal").where({
+    const mealQueryResult = await knex("meal").where({
       id: mealId
     });
+    if(mealQueryResult.length == 0){
+      response.status(404).json({
+        error: "No such meal found!"
+      });
+      return;
+    }
+    const mealById = mealQueryResult[0];
+    const reservedGuestCount = await knex("meal")
+      .join("reservation", "reservation.meal_id", "meal.id")
+      .sum("reservation.number_of_guests as guestCount")
+      .where("meal.id", mealId)
+      .first();
+    mealById.canBeReserved = (mealById.max_reservations - reservedGuestCount.guestCount) > 0;
+    
     response.json(mealById);
 
   } catch (error) {

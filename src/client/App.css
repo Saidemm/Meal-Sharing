@@ -2,18 +2,22 @@
     box-sizing: border-box;
 }
 
-nav {
-    display : flex;
-    justify-content : space-around;
-    align-items : center;
-    min-height : 10vh;
-    background-color: rgb(248, 184, 160);
+.mainPageContainer {
+    background-color: white;
 }
 
-.nav-links {
-    width : 50%;
-    display : flex;
-    justify-content : space-around;
-    align-items : center;
-    list-style : none;
+.contentContainer {
+    padding: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 10vh;
+    background-color: rgb(248, 184, 160);
+    background-image: url(../client/assets/images/banner-texture.jpg);
+    background-size: cover;
+    border-top: black 2px solid;
+    height: 300px;
 }

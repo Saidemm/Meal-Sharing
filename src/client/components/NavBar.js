@@ -1,32 +1,32 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-
+import logo from '../assets/images/meal-sharing.png';
+import "./mealComponentStyle.css";
 
 function Nav() {
-    // const navStyle = {}
-
     return (
-        // <Router>
-            <nav>
-                <p>Logo</p>
-                <h3>Meal Sharing</h3>
-                <ul className="nav-links">
-                    <Link to='/'>
-                        <li>Home</li>
-                    </Link>
-                    <Link to='/About'>
-                        <li>About</li>
-                    </Link>
-                    <Link to='/Meals'>
-                        <li>Meals Experiences</li>
-                    </Link>
-                </ul>
-            </nav>
-        // </Router>
+        <div className="banner">
+            <div className="logoContainer">
+                <img src={logo} ></img>
+            </div>
+            <div className="navContainer">
+                <nav>
+                    <ul className="navList">
+                        <Link to='/'>
+                            <li>Home</li>
+                        </Link>
+                        <Link to='/meals'>
+                            <li>Our-Meals</li>
+                        </Link>
+                        <Link to='/about'>
+                            <li>About</li>
+                        </Link>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
     );
 }
-
-{/* <li>Meals</li>
-<li>Reservation</li> */}
 
 export default Nav;
