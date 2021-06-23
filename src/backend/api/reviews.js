@@ -16,10 +16,26 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
     try {
+        
         let newReview = request.body;
-        newReview.created_date = new Date(newReview.created_date);
+        console.log("reaching meal", newReview);
+        if(newReview.title == null || newReview.title.trim().length == 0){
+            response.status(400).send({
+                error: "Title is mandatory."
+            });
+            return;
+        }
+        else if(newReview.stars == null || newReview.stars.trim().length == 0){
+            response.status(400).send({
+                error: "Stars is mandatory."
+            });
+            return;
+        }
+        
+
+        newReview.created_date = new Date();
         await knex("review")
-            .insert(request.body)
+            .insert(newReview)
         response.status(201).json("review has been added");
     } catch (error) {
         console.log(error.message);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DisplayMealDetails from './DisplayMealDetails.js';
 import ReserveMeal from './ReserveMeal.js';
+import ReviewMeal from './ReviewMeal.js';
 import "./mealComponentStyle.css";
 
 function MealDetailsProvider() {
@@ -38,12 +39,15 @@ function MealDetailsProvider() {
     }, []);
 
     return (
-        <div>
+        <div className="mealDetailsPageContainer">
             <Link to='/meals' title="Go Back to Meals">&lt;&lt;</Link>
             <DisplayMealDetails meal={meal} loading={loading} error={error} />
             {meal !== null && meal.canBeReserved &&
                 <ReserveMeal meal={meal} />
             }
+            {meal !== null && 
+                <ReviewMeal meal={meal}/>
+            }   
         </div>
     );
 }

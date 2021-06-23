@@ -5,6 +5,8 @@ import About from "./components/About.js";
 import MealsProvider from './components/MealsProvider.js';
 import MealDetailsProvider from './components/MealDetailsProvider.js';
 import AddMeal from "./components/AddMeal.js";
+import Home from "./components/HomeComponent.js";
+
 import "./App.css";
 
 function App() {
@@ -29,12 +31,7 @@ function App() {
               <MealDetailsProvider />
             </Route>
             <Route exact path="/">
-              <h1>Unforgettable, Immersive Culinary Experiences</h1>
-              <p>
-                Welcome to my meal-sharing App which is to show-case some of the capabilities of React and Node.js.
-                You can view meals, add a new meal or reserve a a meal.
-                Go to 'Our-Meals' and check them out out.
-              </p>
+              <Home />
             </Route>
           </Switch>
         </div>
@@ -48,11 +45,7 @@ function App() {
 }
 
 
-const Home = () => (
-  <section className="home-component">
-    <h1>Home</h1>
-  </section>
-)
+
 
 
 export default App;

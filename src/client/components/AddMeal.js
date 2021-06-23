@@ -45,7 +45,7 @@ function AddMeal() {
     }
 
     return (
-        <>
+        <div className="addMealPageContainer">
             <Link to='/meals'>&lt;&lt;</Link>
             {error !== null &&
                 <div className="errorMessageContainer">Storing Meal failed: {error.error}<br /><br /></div>
@@ -73,7 +73,7 @@ function AddMeal() {
             {storing &&
                 <span>&nbsp;Storing New Meal...</span>}
             <br /><br />
-        </>
+        </div>
     )
 }
 

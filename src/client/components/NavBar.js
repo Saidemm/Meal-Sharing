@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/images/meal-sharing.png';
 import "./mealComponentStyle.css";
 
+
 function Nav() {
     return (
         <div className="banner">

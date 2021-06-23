@@ -19,9 +19,7 @@ function MealsProvider() {
             try {
                 setLoading(true);
                 setError(null);
-                // To make a delay to show loading a bit longer
-                //const delay = ms => new Promise(res => setTimeout(res, ms));
-                //await delay(5000);
+
                 const apiData = await fetch(API_URL);
                 if (apiData.ok) {
                     const allMeals = await apiData.json();

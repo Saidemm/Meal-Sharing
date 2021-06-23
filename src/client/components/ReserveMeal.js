@@ -64,7 +64,7 @@ function ReserveMeal(props) {
             <input type="email" value={formData.contact_email} onChange={e => updateFormData("contact_email", e.target.value)} placeholder="Email" />
             <br /><br />
 
-            <button onClick={reserveMeal}>Store Meal</button>
+            <button onClick={reserveMeal}>Reserve Meal</button>
             {reserving &&
                 <span>&nbsp;Reserving the Meal...</span>}
             <br /><br />

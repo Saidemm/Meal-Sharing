@@ -1,16 +1,18 @@
 import React from 'react';
-import { Link, Router, Route, Switch, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./mealComponentStyle.css";
 
 function DisplayMeal(props) {
   return (
-    <div class="mealItemContainer">
-      <span>
-        <Link to={`/meals/${props.meal.id}`}>
-          {props.meal.title}
-        </Link>
-      </span>
-    </div>
+    <Link to={`/meals/${props.meal.id}`}>
+      <div className={`mealItemContainer meal_img_${props.index>5?'other':props.index + 1}`}>
+        <span>
+        </span>
+      </div>
+      <div className="mealTitleContainer">
+        {props.meal.title}
+      </div>
+    </Link>
   );
 }
 
