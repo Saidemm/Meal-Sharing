@@ -57,7 +57,7 @@ function ReviewMeal(props) {
                 <div className="successMessageContainer">The reviewing was done successfully!<br /><br /></div>
             }
             {error === null && !success &&
-                <div>Please fill-out the form and press "Review Meal" button to review the meal above.<br /><br /></div>
+                <div>Please help us by giving a review to the meal above.<br /><br /></div>
             }
             <input type="text" value={formData.title} onChange={e => updateFormData("title", e.target.value)} placeholder="title" />
             <br /><br />

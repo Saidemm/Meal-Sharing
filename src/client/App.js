@@ -6,6 +6,7 @@ import MealsProvider from './components/MealsProvider.js';
 import MealDetailsProvider from './components/MealDetailsProvider.js';
 import AddMeal from "./components/AddMeal.js";
 import Home from "./components/HomeComponent.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import "./App.css";
 
