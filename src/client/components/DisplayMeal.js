@@ -9,7 +9,7 @@ function DisplayMeal(props) {
     "Homemade spagetti": "meal_img_3",
     "Authentic Tortellini": "meal_img_4",
     "Authentic Tortellini Soup": "meal_img_5",
-    "Persian Tahchin": "meal_img_6",
+    "Saffron Cake (Tahchin)": "meal_img_6",
   };
   function getRelevantMealImgClass(mealTitle) {
     return meal_img_mapping[mealTitle] != null ? meal_img_mapping[mealTitle] : "meal_img_other";
