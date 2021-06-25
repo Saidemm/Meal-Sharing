@@ -14,7 +14,7 @@ function ReserveMeal(props) {
                 setError(null);
                 setReserving(true);
                 setSuccess(false);
-                const response = await fetch('http://localhost:5000/api/reservations', {
+                const response = await fetch('/api/reservations', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {

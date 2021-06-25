@@ -9,13 +9,14 @@ import "./mealComponentStyle.css";
 export const MealsContext = React.createContext({});
 
 function MealsProvider() {
-    const [mealList, setMealList] = useState([]);;
+    const [mealList, setMealList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [mealTitle, setMealTitle] = useState("");
 
     useEffect(() => {
         const fetchingMealsApi = async () => {
-            const API_URL = 'http://localhost:5000/api/meals';
+            const API_URL = `/api/meals?title=${mealTitle}`;
             try {
                 setLoading(true);
                 setError(null);
@@ -36,10 +37,11 @@ function MealsProvider() {
             }
         }
         fetchingMealsApi();
-    }, []);
+        console.log('searching');
+    }, [mealTitle]);
 
     return (
-        <MealsContext.Provider value={{ mealList: mealList, loading: loading, error: error }}>
+        <MealsContext.Provider value={{ mealList: mealList, loading: loading, error: error, mealTitle: mealTitle, setMealTitle: setMealTitle}}>
             <Meals />
         </MealsContext.Provider>
     )

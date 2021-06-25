@@ -13,7 +13,7 @@ function MealDetailsProvider() {
 
     useEffect(() => {
         const fetchingMealsApi = async () => {
-            const API_URL = `http://localhost:5000/api/meals/${mealId}`;
+            const API_URL = `/api/meals/${mealId}`;
             try {
                 setLoading(true);
                 setError(null);
@@ -42,6 +42,9 @@ function MealDetailsProvider() {
         <div className="mealDetailsPageContainer">
             <Link to='/meals' title="Go Back to Meals">&lt;&lt;</Link>
             <DisplayMealDetails meal={meal} loading={loading} error={error} />
+            {meal !== null && !meal.canBeReserved &&
+                <span className="reserveMessage">The meal is fully booked. The reservation is not possible for this Meal!</span>
+            }
             {meal !== null && meal.canBeReserved &&
                 <ReserveMeal meal={meal} />
             }

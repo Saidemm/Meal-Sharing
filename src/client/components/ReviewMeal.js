@@ -14,7 +14,7 @@ function ReviewMeal(props) {
                 setError(null);
                 setReviewing(true);
                 setSuccess(false);
-                const response = await fetch('http://localhost:5000/api/reviews', {
+                const response = await fetch('/api/reviews', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {

@@ -1,6 +1,7 @@
 import React, { useState,useContext } from 'react';
 import { Link } from "react-router-dom";
 import {MealAutocompleteContext} from './MealAutocompleteProvider.js';
+import "./HomeComponent.css";
 
 
 function MealAutocompleteSearcher(){
@@ -39,9 +40,13 @@ function MealAutocompleteSearcher(){
 
     return (
         <div>
-            <input className="input" type="text" value={mealContext.inputMeal}
-                onChange= {(e) => inputMealChanged(e)}
-                placeholder="Search for a meal"/>
+            <span className="inputContainer">
+                <input class="inputText" type="text" value={mealContext.inputMeal}
+                    onChange= {(e) => inputMealChanged(e)}
+                    placeholder="Search for a meal"/>
+                <span></span>
+            </span>
+            
 
             {suggestionApplied !==null &&
                 <Link to={`/meals/${suggestionApplied.id}`}>

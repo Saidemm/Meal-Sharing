@@ -13,7 +13,7 @@ function MealAutocompleteProvider() {
 
     useEffect (() => {
         const mealfetch = async() => {
-            const API_URL = `http://localhost:5000/api/meals?limit=5&title=${inputMeal}`
+            const API_URL = `/api/meals?limit=5&title=${inputMeal}`
             try{
                 setLoading(true);
                 setError(null);
@@ -41,7 +41,7 @@ function MealAutocompleteProvider() {
     
     return (
         <MealAutocompleteContext.Provider value = {{mealList: mealList, inputMeal: inputMeal, setInputMeal: setInputMeal, loading: loading, error: error}}>
-            <MealAutocompleteSearcher />
+            <MealAutocopleteSearcher />
         </MealAutocompleteContext.Provider>
     )
 

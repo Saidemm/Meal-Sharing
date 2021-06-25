@@ -17,7 +17,7 @@ function DisplayMealDetails(props) {
                     <li><b>Description:</b> {props.meal.description}</li>
                     <li><b>Location:</b> {props.meal.location}</li>
                     <li><b>Max Reservation:</b> {props.meal.max_reservations}</li>
-                    <li><b>Price:</b> {props.meal.price}</li>
+                    <li><b>Price:</b> {props.meal.price} <b>DKK</b></li>
                 </ul>
             }
         </>

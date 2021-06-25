@@ -1,17 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import DisplayMeal from './DisplayMeal.js';
 import { MealsContext } from './MealsProvider.js';
 import { Link } from "react-router-dom";
 import "./mealComponentStyle.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons'
 
 function Meals() {
     const mealsContext = useContext(MealsContext);
 
+    const [displayFilters, setDisplayFilters] = useState(false);
+
     return (
         <div className="mealPageContainer">
-            <p>
-                List of our meals is as follows:
-            </p>
+            <div className="mealHeaderContainer">
+                <div>
+                    <p>
+                        <b>Our meal list:</b>
+                    </p>
+                </div>
+                <div>
+                    <div className="filterButton" onClick={() => setDisplayFilters(true)}>
+                        Filters&nbsp;
+                        <FontAwesomeIcon icon={faFilter} />
+                    </div>
+                </div>
+            </div>
+            <hr className='mealSearchHR'></hr>
+            {displayFilters &&
+                <>
+                    <div>
+                        <input type="text" onChange={e => mealsContext.setMealTitle(e.target.value)} placeholder="Meal Title" />
+                    </div>
+                    <hr className='mealSearchHR'></hr>
+                </>
+            }
             {!mealsContext.loading && mealsContext.error === null &&
                 <div className="mealListContainer">
                     {mealsContext.mealList.map((meal, index) =>

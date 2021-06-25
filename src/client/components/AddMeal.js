@@ -14,7 +14,7 @@ function AddMeal() {
                 setError(null);
                 setStoring(true);
                 setSuccess(false);
-                const response = await fetch('http://localhost:5000/api/meals', {
+                const response = await fetch('/api/meals', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
