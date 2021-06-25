@@ -41,7 +41,7 @@ function MealAutocompleteProvider() {
     
     return (
         <MealAutocompleteContext.Provider value = {{mealList: mealList, inputMeal: inputMeal, setInputMeal: setInputMeal, loading: loading, error: error}}>
-            <MealAutocopleteSearcher />
+            <MealAutocompleteSearcher />
         </MealAutocompleteContext.Provider>
     )
 
