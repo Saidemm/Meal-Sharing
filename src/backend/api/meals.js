@@ -2,11 +2,8 @@ const express = require("express");
 const router = express.Router();
 const knex = require("../database");
 
-
-
-
 function showMealsWithAvailableReservations(request) {
-  if ("availableReservations" in request.query) {
+  if ("availableReservations" in request.query && request.query.availableReservations.trim().length!=0) {
     let availableReservations = request.query.availableReservations;
     if (availableReservations == 'true') {
       return true;
@@ -16,8 +13,8 @@ function showMealsWithAvailableReservations(request) {
 }
 
 function getMaxPrice(request) {
-  if ("maxPrice" in request.query) {
-    const maxPrice = parseFloat(request.query.maxPrice);
+  if ("maxPrice" in request.query && request.query.maxPrice.trim().length!=0) {
+    const maxPrice = parseFloat(request.query.maxPrice.trim());
     if (isNaN(maxPrice)) {
       throw {
         type: "Invalid Input Param",
@@ -31,7 +28,7 @@ function getMaxPrice(request) {
 }
 
 function getPartialTitle(request) {
-  if ("title" in request.query) {
+  if ("title" in request.query && request.query.title.trim().length!=0) {
     const title = request.query.title.toLowerCase();
     return title;
   } else {
@@ -40,7 +37,7 @@ function getPartialTitle(request) {
 }
 
 function getCreatedAfterDate(request) {
-  if ("createdAfter" in request.query) {
+  if ("createdAfter" in request.query && request.query.createdAfter.trim().length!=0) {
     if (request.query.createdAfter == '') {
       return null;
     }
@@ -58,7 +55,7 @@ function getCreatedAfterDate(request) {
 }
 
 function getLimit(request) {
-  if ("limit" in request.query) {
+  if ("limit" in request.query && request.query.limit.trim().length!=0) {
     const limit = parseInt(request.query.limit);
     if (isNaN(limit)) {
       throw {

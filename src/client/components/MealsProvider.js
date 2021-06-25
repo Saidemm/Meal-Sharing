@@ -12,11 +12,11 @@ function MealsProvider() {
     const [mealList, setMealList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [mealTitle, setMealTitle] = useState("");
+    const [mealFilter, setMealFilter] = useState({title:"", maxPrice:"", availableReservations:"", createdAfter:""});
 
     useEffect(() => {
         const fetchingMealsApi = async () => {
-            const API_URL = `/api/meals?title=${mealTitle}`;
+            const API_URL = `/api/meals?title=${mealFilter.title}&maxPrice=${mealFilter.maxPrice}&availableReservations=${mealFilter.availableReservations}&createdAfter=${mealFilter.createdAfter}&limit=50`;
             try {
                 setLoading(true);
                 setError(null);
@@ -38,10 +38,10 @@ function MealsProvider() {
         }
         fetchingMealsApi();
         console.log('searching');
-    }, [mealTitle]);
+    }, [mealFilter]);
 
     return (
-        <MealsContext.Provider value={{ mealList: mealList, loading: loading, error: error, mealTitle: mealTitle, setMealTitle: setMealTitle}}>
+        <MealsContext.Provider value={{ mealList: mealList, loading: loading, error: error, mealFilter: mealFilter, setMealFilter: setMealFilter}}>
             <Meals />
         </MealsContext.Provider>
     )

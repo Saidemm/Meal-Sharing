@@ -61,7 +61,13 @@ function ReviewMeal(props) {
             }
             <input type="text" value={formData.title} onChange={e => updateFormData("title", e.target.value)} placeholder="title" />
             <br /><br />
-            <input type="number" value={formData.stars} onChange={e => updateFormData("stars", e.target.value)} placeholder="Stars" />
+            <select type="number" value={formData.stars} onChange={e => updateFormData("stars", e.target.value)} placeholder="Stars" >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
             <br /><br />
             <textarea type="text" value={formData.description} onChange={e => updateFormData("description", e.target.value)} placeholder="description" />
             <br /><br />

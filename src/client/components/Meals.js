@@ -11,6 +11,12 @@ function Meals() {
 
     const [displayFilters, setDisplayFilters] = useState(false);
 
+    function updateFilterObject(filterField, newValue){
+        let newFilterObject = {...mealsContext.mealFilter};
+        newFilterObject[filterField] = newValue;
+        mealsContext.setMealFilter(newFilterObject);
+    }
+
     return (
         <div className="mealPageContainer">
             <div className="mealHeaderContainer">
@@ -29,8 +35,13 @@ function Meals() {
             <hr className='mealSearchHR'></hr>
             {displayFilters &&
                 <>
-                    <div>
-                        <input type="text" onChange={e => mealsContext.setMealTitle(e.target.value)} placeholder="Meal Title" />
+                    <div className='mealFieldsContainer'>
+                        <input type="text" onChange={e => updateFilterObject("title", e.target.value)} placeholder="Meal Title" />
+                        <input type="number" onChange={e => updateFilterObject("maxPrice", e.target.value)} placeholder="Max Price" />
+                        <input type="date" onChange={e => updateFilterObject("createdAfter", e.target.value)} placeholder="Created After" />
+                        <span>
+                            <input type="checkbox" onChange={e => updateFilterObject("availableReservations", e.target.checked)}/> Available to Reserve
+                        </span>
                     </div>
                     <hr className='mealSearchHR'></hr>
                 </>
@@ -47,6 +58,16 @@ function Meals() {
                             </span>
                         </div>
                     </Link>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
+                    <div className="mealItemContainer mealItemContainerEmptyCell"/>
                 </div>
             }
             {mealsContext.loading && mealsContext.error === null &&

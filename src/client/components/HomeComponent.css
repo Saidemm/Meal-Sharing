@@ -50,15 +50,15 @@
 }
 
 .inputContainer *:not(span) {
-		position: relative;
-		display: inherit;
-		border-radius: inherit;
-		margin: 0;
-		border: none;
-		outline: none;
-		padding: 0 .325em;
-		z-index: 1;
-	}
+    position: relative;
+    display: inherit;
+    border-radius: inherit;
+    margin: 0;
+    border: none;
+    outline: none;
+    padding: 0 .325em;
+    z-index: 1;
+}
 
 .inputContainer *:not(span):focus + span{
 		opacity: 1;

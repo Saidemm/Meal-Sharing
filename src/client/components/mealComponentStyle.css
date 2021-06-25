@@ -89,6 +89,11 @@
     background-color: turquoise;
 }
 
+.mealFieldsContainer{
+    display: flex;
+    justify-content: space-around;
+}
+
 .mealListContainer {
     display: flex;
     flex-wrap: wrap;
@@ -112,6 +117,11 @@
 
 .mealItemContainer:hover {
     background-color: turquoise;
+}
+
+.mealItemContainerEmptyCell{
+    height: 0px !important;
+    border: 0px !important;
 }
 
 .meal_img_1 {
