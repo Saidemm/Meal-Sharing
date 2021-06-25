@@ -48,8 +48,8 @@ function Meals() {
             }
             {!mealsContext.loading && mealsContext.error === null &&
                 <div className="mealListContainer">
-                    {mealsContext.mealList.map((meal, index) =>
-                        <DisplayMeal key={meal.id} meal={meal} index={index} />
+                    {mealsContext.mealList.map((meal) =>
+                        <DisplayMeal key={meal.id} meal={meal} />
                     )}
                     <Link to="/addMeal" title="Add a New Meal">
                         <div className="addMealContainer mealItemContainer">

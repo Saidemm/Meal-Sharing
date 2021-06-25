@@ -4,15 +4,15 @@ import "./mealComponentStyle.css";
 
 function DisplayMeal(props) {
   const meal_img_mapping = {
-    "Homemade Pasta":"meal_img_1",
-    "Homemade Gnocchi":"meal_img_2",
-    "Homemade spagetti":"meal_img_3",
-    "Authentic Tortellini":"meal_img_4",
-    "Authentic Tortellini Soup":"meal_img_5",
-    "Persian Tahchin":"meal_img_6",
+    "Homemade Pasta": "meal_img_1",
+    "Homemade Gnocchi": "meal_img_2",
+    "Homemade spagetti": "meal_img_3",
+    "Authentic Tortellini": "meal_img_4",
+    "Authentic Tortellini Soup": "meal_img_5",
+    "Persian Tahchin": "meal_img_6",
   };
-  function getRelevantMealImgClass(mealTitle){
-    return meal_img_mapping[mealTitle]!=null?meal_img_mapping[mealTitle]:"meal_img_other";
+  function getRelevantMealImgClass(mealTitle) {
+    return meal_img_mapping[mealTitle] != null ? meal_img_mapping[mealTitle] : "meal_img_other";
   }
 
   return (
