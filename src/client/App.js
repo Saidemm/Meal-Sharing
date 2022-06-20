@@ -1,21 +1,52 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import TestComponent from "./components/TestComponent/TestComponent";
+import Nav from "./components/NavBar.js";
+import About from "./components/About.js";
+import MealsProvider from './components/MealsProvider.js';
+import MealDetailsProvider from './components/MealDetailsProvider.js';
+import AddMeal from "./components/AddMeal.js";
+import Home from "./components/HomeComponent.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import "./App.css";
 
 function App() {
   return (
     <Router>
-      <Route exact path="/">
-        <p>test</p>
-      </Route>
-      <Route exact path="/lol">
-        <p>lol</p>
-      </Route>
-      <Route exact path="/test-component">
-        <TestComponent></TestComponent>
-      </Route>
+      <div className="mainPageContainer">
+        <Route path="/">
+          <Nav />
+        </Route>
+        <div className="contentContainer">
+          <Switch>
+            <Route exact path="/addMeal">
+              <AddMeal />
+            </Route>
+            <Route exact path="/about" component={About}>
+              <About />
+            </Route>
+            <Route exact path="/meals"  >
+              <MealsProvider />
+            </Route>
+            <Route exact path="/meals/:mealId">
+              <MealDetailsProvider />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+        <Route path="/">
+          <div className="footer">
+          </div>
+        </Route>
+      </div>
     </Router>
   );
 }
+
+
+
+
 
 export default App;

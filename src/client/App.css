@@ -1,3 +1,23 @@
 * {
     box-sizing: border-box;
 }
+
+.mainPageContainer {
+    background-color: white;
+}
+
+.contentContainer {
+    padding: 0px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 10vh;
+    background: rgb(250,250,250);
+    background: linear-gradient(180deg, rgba(23,139,127,1) 0%, rgba(208,254,249,1) 1%, rgba(250,250,250,1) 4%, rgba(249,249,249,1) 73%, rgba(183,215,212,1) 94%, rgba(208,254,249,1) 98%, rgba(23,139,127,1) 100%);
+    border-left:#ccf0ec solid 2px;
+    border-right:#ccf0ec solid 2px;
+    height: 300px;
+}

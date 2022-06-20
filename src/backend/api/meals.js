@@ -3,7 +3,7 @@ const router = express.Router();
 const knex = require("../database");
 
 function showMealsWithAvailableReservations(request) {
-  if ("availableReservations" in request.query) {
+  if ("availableReservations" in request.query && request.query.availableReservations.trim().length!=0) {
     let availableReservations = request.query.availableReservations;
     if (availableReservations == 'true') {
       return true;
@@ -13,8 +13,8 @@ function showMealsWithAvailableReservations(request) {
 }
 
 function getMaxPrice(request) {
-  if ("maxPrice" in request.query) {
-    const maxPrice = parseFloat(request.query.maxPrice);
+  if ("maxPrice" in request.query && request.query.maxPrice.trim().length!=0) {
+    const maxPrice = parseFloat(request.query.maxPrice.trim());
     if (isNaN(maxPrice)) {
       throw {
         type: "Invalid Input Param",
@@ -28,7 +28,7 @@ function getMaxPrice(request) {
 }
 
 function getPartialTitle(request) {
-  if ("title" in request.query) {
+  if ("title" in request.query && request.query.title.trim().length!=0) {
     const title = request.query.title.toLowerCase();
     return title;
   } else {
@@ -37,7 +37,7 @@ function getPartialTitle(request) {
 }
 
 function getCreatedAfterDate(request) {
-  if ("createdAfter" in request.query) {
+  if ("createdAfter" in request.query && request.query.createdAfter.trim().length!=0) {
     if (request.query.createdAfter == '') {
       return null;
     }
@@ -55,7 +55,7 @@ function getCreatedAfterDate(request) {
 }
 
 function getLimit(request) {
-  if ("limit" in request.query) {
+  if ("limit" in request.query && request.query.limit.trim().length!=0) {
     const limit = parseInt(request.query.limit);
     if (isNaN(limit)) {
       throw {
@@ -117,9 +117,6 @@ router.get("/", async (request, response) => {
       dbQueryParams[dbQueryParams.length] = limit;
     }
 
-    console.log(dbQuery);
-    console.log(dbQueryParams);
-
     let meals = await knex.raw(dbQuery, dbQueryParams);
     response.send(meals[0]);
   } catch (error) {
@@ -140,12 +137,35 @@ router.get("/", async (request, response) => {
 router.post('/', async (request, response) => {
   try {
     let newMeal = request.body;
+    if(newMeal.title == null || newMeal.title.trim() == ''){
+      response.status(400).send({
+        error: "Meal title is mandatory."
+      });
+      return;
+    }
+    else if(newMeal.location == null || newMeal.location.trim() == ''){
+      response.status(400).send({
+        error: "Meal location is mandatory."
+      });
+    }
+    else if(newMeal.max_reservations == null || newMeal.max_reservations.trim() == ''){
+      response.status(400).send({
+        error: "Meal max_reservations is mandatory."
+      });
+    }
+    else if(newMeal.when == null || newMeal.when.trim() == ''){
+      response.status(400).send({
+        error: "Meal 'when' field is mandatory."
+      });
+    }
+
     newMeal.when = new Date(newMeal.when);
-    newMeal.created_date = new Date(newMeal.created_date);
+    newMeal.created_date = new Date();
     const newInsertedMeal = await knex("meal")
-      .insert(request.body)
-    response.end("New meal:" + JSON.stringify(newInsertedMeal))
+      .insert(newMeal);
+    response.send("New meal:" + JSON.stringify(newInsertedMeal));
   } catch (error) {
+    console.log(error);
     response.status(500).send({
       error: "Internal Server Error."
     });
@@ -162,9 +182,23 @@ router.get("/:id", async (request, response) => {
       });
       return;
     }
-    const mealById = await knex("meal").where({
+    const mealQueryResult = await knex("meal").where({
       id: mealId
     });
+    if(mealQueryResult.length == 0){
+      response.status(404).json({
+        error: "No such meal found!"
+      });
+      return;
+    }
+    const mealById = mealQueryResult[0];
+    const reservedGuestCount = await knex("meal")
+      .join("reservation", "reservation.meal_id", "meal.id")
+      .sum("reservation.number_of_guests as guestCount")
+      .where("meal.id", mealId)
+      .first();
+    mealById.canBeReserved = (mealById.max_reservations - reservedGuestCount.guestCount) > 0;
+    
     response.json(mealById);
 
   } catch (error) {
